@@ -6,8 +6,8 @@ It helps user to list their contact and find them by checking the list. <br>
 PHP Laravel 5.8
 
 ## Component
-Vue.js
-Axios
+- Vue.js
+- Axios
 
 ## Functions
 Add ,Edit ,View and Delete Task (CRUD)
