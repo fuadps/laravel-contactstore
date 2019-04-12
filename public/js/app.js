@@ -1787,6 +1787,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1830,7 +1842,41 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    updateContact: function updateContact() {}
+    showContact: function showContact(id) {
+      console.log('show contact....');
+      var self = this;
+      axios.get('api/contact/' + id).then(function (response) {
+        self.contact.id = response.data.id;
+        self.contact.name = response.data.name;
+        self.contact.email = response.data.email;
+        self.contact.phone = response.data.phone;
+        self.edit = true;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    updateContact: function updateContact(id) {
+      console.log('Updating contacts....');
+      var self = this;
+      var parameters = Object.assign({}, self.contact);
+      axios.patch('api/contact/' + id, parameters).then(function () {
+        self.contact.name = '';
+        self.contact.email = '';
+        self.contact.phone = '';
+        self.edit = false;
+        self.fetchContactList();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    deleteContact: function deleteContact(id) {
+      var self = this;
+      axios["delete"]('api/contact/delete/' + id).then(function (response) {
+        self.fetchContactList();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -37125,135 +37171,190 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h1", [_vm._v("Contacts")]),
-    _vm._v(" "),
+  return _c("div", { staticClass: "row justify-content-center mt-3" }, [
     _c(
-      "form",
-      {
-        attrs: { action: "#" },
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            _vm.edit ? _vm.updateContact(_vm.contact.id) : _vm.createContact()
-          }
-        }
-      },
+      "div",
+      { staticClass: "col-md-6" },
       [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Name : ")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.contact.name,
-                expression: "contact.name"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", name: "name" },
-            domProps: { value: _vm.contact.name },
+        _c("h1", { staticClass: "text-center" }, [_vm._v("Contacts")]),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            attrs: { action: "#" },
             on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.contact, "name", $event.target.value)
+              submit: function($event) {
+                $event.preventDefault()
+                _vm.edit
+                  ? _vm.updateContact(_vm.contact.id)
+                  : _vm.createContact()
               }
             }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Email : ")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.contact.email,
-                expression: "contact.email"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", name: "email" },
-            domProps: { value: _vm.contact.email },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+          },
+          [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", [_vm._v("Name : ")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.contact.name,
+                    expression: "contact.name"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "name" },
+                domProps: { value: _vm.contact.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.contact, "name", $event.target.value)
+                  }
                 }
-                _vm.$set(_vm.contact, "email", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Phone : ")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.contact.phone,
-                expression: "contact.phone"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", name: "phone" },
-            domProps: { value: _vm.contact.phone },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", [_vm._v("Email : ")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.contact.email,
+                    expression: "contact.email"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "email" },
+                domProps: { value: _vm.contact.email },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.contact, "email", $event.target.value)
+                  }
                 }
-                _vm.$set(_vm.contact, "phone", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c(
-            "button",
-            {
-              directives: [
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", [_vm._v("Phone : ")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.contact.phone,
+                    expression: "contact.phone"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "phone" },
+                domProps: { value: _vm.contact.phone },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.contact, "phone", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c(
+                "button",
                 {
-                  name: "show",
-                  rawName: "v-show",
-                  value: !_vm.edit,
-                  expression: "!edit"
-                }
-              ],
-              staticClass: "btn btn-primary",
-              attrs: { type: "submit" }
-            },
-            [_vm._v("Create Contact")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              directives: [
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.edit,
+                      expression: "!edit"
+                    }
+                  ],
+                  staticClass: "btn btn-primary btn-block",
+                  attrs: { type: "submit" }
+                },
+                [_vm._v("Create Contact")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
                 {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.edit,
-                  expression: "edit"
-                }
-              ],
-              staticClass: "btn btn-primary",
-              attrs: { type: "submit" }
-            },
-            [_vm._v("Edit Contact")]
-          )
-        ])
-      ]
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.edit,
+                      expression: "edit"
+                    }
+                  ],
+                  staticClass: "btn btn-primary btn-block",
+                  attrs: { type: "submit" }
+                },
+                [_vm._v("Edit Contact")]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("h1", { staticClass: "text-center" }, [_vm._v("Contacts List")]),
+        _vm._v(" "),
+        _vm._l(_vm.list, function(contact) {
+          return _c("ul", { staticClass: "list-group mt-2" }, [
+            _c("li", { staticClass: "list-group-item text-center" }, [
+              _c("strong", [_vm._v(" " + _vm._s(contact.name) + " ")])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "list-group-item text-center" }, [
+              _vm._v(" " + _vm._s(contact.email) + " ")
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "list-group-item text-center" }, [
+              _vm._v(" " + _vm._s(contact.phone) + " ")
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "list-group-item" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-default btn-block",
+                  on: {
+                    click: function($event) {
+                      return _vm.showContact(contact.id)
+                    }
+                  }
+                },
+                [_vm._v("Edit")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger btn-block mt-1",
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteContact(contact.id)
+                    }
+                  }
+                },
+                [_vm._v("Delete")]
+              )
+            ])
+          ])
+        })
+      ],
+      2
     )
   ])
 }

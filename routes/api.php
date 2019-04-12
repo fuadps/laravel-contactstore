@@ -9,7 +9,7 @@ use App\Contact;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
+| routes are loaded by thephphp RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
@@ -21,7 +21,7 @@ Route::group(['middleware' => 'api'], function() {
     });
 
     // Get Single Contact
-    Route::get('contacts/{$id}',function($id) {
+    Route::get('contact/{id}',function($id) {
         return Contact::findOrFail($id);
     });
 
@@ -35,7 +35,7 @@ Route::group(['middleware' => 'api'], function() {
     });
 
     // Update Contact
-    Route::patch('contact/{$id}',function(Request $request,$id) {
+    Route::patch('contact/{id}',function(Request $request,$id) {
         Contact::findOrFail($id)->update([
             'name' => $request->input(['name']),
             'email' => $request->input(['email']),
@@ -44,7 +44,7 @@ Route::group(['middleware' => 'api'], function() {
     });
 
     // Delete Contact
-    Route::delete('contact/{$id}',function($id) {
+    Route::delete('contact/delete/{id}',function($id) {
         Contact::destroy($id);
     });
 });
